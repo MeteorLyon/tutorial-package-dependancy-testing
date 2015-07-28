@@ -1,0 +1,19 @@
+{
+  "name": "rebolon-tutorial-package-dependancy-testing",
+  "author": "Benjamin RICHARD <richard.tribes@gmail.com>",
+  "version": "1.0.0",
+  "licence": "Proprietary",
+  "config": {
+    "rooturl": "http://localhost",
+    "mongourl": "",
+    "mailurl": "",
+    "port": "3000",
+    "packagedirs": "",
+    "settingsfile": "settings.dist.json",
+    "testsettingsfile": "settings.tests.dist.json",
+    "testpackagename": "tobetested"
+  },
+  "scripts": {
+    "start": "./bin/start.sh"
+  }
+}
