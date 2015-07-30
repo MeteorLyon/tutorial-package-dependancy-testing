@@ -4,25 +4,18 @@ Tinytest.add('availability of variable', function (test) {
 });
 
 Tinytest.add('availability of imported package', function (test) {
-  test.equal(typeof Child, "undefined"); // not imported in tests
+  test.equal(typeof Child, "object"); // imported in tests to allow redefinition from test environment
 });
 
-// I want to test methods from PackageParent but it depends on Parent collection
-// How to stubs the Parent collections ?
-// Actually my redefinition of Parent inside the Tinytest is not used by PackageParent
+// This, time everything works !
+// I just have to redefine the methods of the collections findOne/find.... and all variables that point to it will
+// take care of the modification. My previous mistake was link to the fact that i reaffect a new content to the variable
+// So all copy of the variable was broken and still used the original object. That was a really stupid mistake !
+// And don't hesitate to import sub-packages (here: Child)
 Tinytest.add('test core.js', function (test) {
-  // stubs for Parent
-  Parent = {
-    "findOne": function() {
-      return {
-        "name": "testParentPackage",
-        "date": new Date(),
-        "stubs": "oh yes"
-      }
-    }
-  };
-
   var result = PackageParent.lambdaParent();
+  test.equal(result.name, "testParentPackage");
 
-  test.equal(result.name, Parent.findOne().name);
+  var result = PackageParent.lambdaChild();
+  test.equal(result.name, "testChildPackage");
 });

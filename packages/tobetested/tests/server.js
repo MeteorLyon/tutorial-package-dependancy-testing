@@ -1,43 +1,21 @@
 Tinytest.add('availability of variable', function (test) {
-  test.equal(typeof ToBeTested, "undefined");  // not exported, so not available from tests
+  test.equal(typeof ToBeTested, "object");  // exported via api, this is mandatory if we want to be able to redefine it in test
   test.equal(typeof PackageToBeTested, "undefined");  // not exported, so not available from tests
 });
 
 Tinytest.add('availability of imported package', function (test) {
-  test.equal(typeof Child, "undefined"); // not imported in tests
+  test.equal(typeof Child, "object"); // imported in tests to allow redefinition from test environment
   test.equal(typeof Parent, "object"); // imported in tests
 });
 
-// I want to test the code in main.js :
-// check that getSomething method (added by main.js) return the right string
-// this method depends on Parent collection declared in package parent and used in toBeTested package
-// How to stubs Parent ?
-// MeteorJs rewrite our package code using export/use/add_files api. So it seems impossible to overload the generated code
-// that looks like : var Parent = Package.parent.Parent;
-//
-// There is a lot of solution :
-// #1 Parent might be exported inside PackageParent like this : PackageParent.Collections = {Parent: Parent};
-// This way i can overlod it inside my test
-// #2 Because i use prefix to define my Collections, i can define a different one for the test environment
-// This way i can remove/add data without modifying the dev environement
-//
-// But i would like to find a better way !
-//
+// This, time everything works !
+// I just have to redefine the methods of the collections findOne/find.... and all variables that point to it will
+// take care of the modification. My previous mistake was link to the fact that i reaffect a new content to the variable
+// So all copy of the variable was broken and still used the original object. That was a really stupid mistake !
+// And don't hesitate to import sub-packages (here: Child)
 Tinytest.add('test core.js', function (test) {
-  // Parent stubs that could be moved inside a tests/stubs.js
-  Parent = {
-    findOne: function() {
-      return {
-        "name": "dave"
-      }
-    }
-  };
+  var expected = "testParentPackage, testToBeTestedPackage !!!",
+      result = PackageParent.getSomething();
 
-  // I tryed to export Parent : but it's not used by toBeTested.getSomething()
-  Package.parent.Parent = Parent;
-
-  var result = PackageParent.getSomething(),
-    expected = "dave !!!";
-
-  test.equal(expected, result);
+  test.equal(result, expected);
 });
