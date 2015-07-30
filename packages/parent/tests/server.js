@@ -7,22 +7,15 @@ Tinytest.add('availability of imported package', function (test) {
   test.equal(typeof Child, "undefined"); // not imported in tests
 });
 
-// I want to test methods from PackageParent but it depends on Parent collection
-// How to stubs the Parent collections ?
-// Actually my redefinition of Parent inside the Tinytest is not used by PackageParent
+// I use test collections to remove al data and set only what i need wothout breking the dev environment
 Tinytest.add('test core.js', function (test) {
-  // stubs for Parent
-  Parent = {
-    "findOne": function() {
-      return {
-        "name": "testParentPackage",
-        "date": new Date(),
-        "stubs": "oh yes"
-      }
-    }
-  };
+  setUp();
 
-  var result = PackageParent.lambdaParent();
+  var expectedParentName = "me";
 
-  test.equal(result.name, Parent.findOne().name);
+  // insert data
+  Parent.insert({"name": expectedParentName});
+
+  var resultParent = PackageParent.lambdaParent();
+  test.equal(resultParent.name, expectedParentName);
 });

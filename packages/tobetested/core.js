@@ -7,7 +7,7 @@ PackageToBeTested = {
 
         if (!curParent) throw new Meteor.Error(1001, "no parent found");
 
-        return curParent.name + " !!!";
+        return curParent.name + ", " + curTested + " !!!";
       }
     });
 

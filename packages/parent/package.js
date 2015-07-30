@@ -19,7 +19,6 @@ Package.onUse(function(api) {
 
 Package.onTest(function(api) {
   api.use('tinytest');
-  api.use('parent');
-  api.addFiles('tests/server.js', 'server');
-  api.export(['Parent']);
+  api.use(['parent']);
+  api.addFiles(['tests/setup.js', 'tests/server.js'], 'server');
 });

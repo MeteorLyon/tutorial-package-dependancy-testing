@@ -8,36 +8,27 @@ Tinytest.add('availability of imported package', function (test) {
   test.equal(typeof Parent, "object"); // imported in tests
 });
 
-// I want to test the code in main.js :
-// check that getSomething method (added by main.js) return the right string
-// this method depends on Parent collection declared in package parent and used in toBeTested package
-// How to stubs Parent ?
-// MeteorJs rewrite our package code using export/use/add_files api. So it seems impossible to overload the generated code
-// that looks like : var Parent = Package.parent.Parent;
-//
-// There is a lot of solution :
-// #1 Parent might be exported inside PackageParent like this : PackageParent.Collections = {Parent: Parent};
-// This way i can overlod it inside my test
-// #2 Because i use prefix to define my Collections, i can define a different one for the test environment
-// This way i can remove/add data without modifying the dev environement
-//
-// But i would like to find a better way !
-//
+// I use test collections to remove al data and set only what i need wothout breking the dev environment
 Tinytest.add('test core.js', function (test) {
-  // Parent stubs that could be moved inside a tests/stubs.js
-  Parent = {
-    findOne: function() {
-      return {
-        "name": "dave"
-      }
-    }
-  };
+  if (typeof ToBeTested == "undefined") {
+    test.fail('ToBeTested is not available because not exported from current package');
+    return;
+  }
 
-  // I tryed to export Parent : but it's not used by toBeTested.getSomething()
-  Package.parent.Parent = Parent;
+  // Test will not continue because ToBeTested is not defined because it's not exported by current package
+  // I really don't know how to test this case where PackageParent is altered by the current package
+  // but depends on variables declared only in the current package.
+  setUp();
 
-  var result = PackageParent.getSomething(),
-    expected = "dave !!!";
+  var expectedParentName = "me",
+      expectedToBeTestedName = "you",
+      expected = expectedParentName + ", " + expectedToBeTestedName + " !!!";
+
+  // insert data
+  Parent.insert({"name": expectedParentName});
+  ToBeTested.insert({"name": expectedToBeTestedName});
+
+  var result = PackageParent.getSomething();
 
   test.equal(expected, result);
 });
