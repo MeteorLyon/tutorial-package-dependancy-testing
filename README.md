@@ -23,6 +23,32 @@ We try to test
 Each time we have one problem : the code depends on the Collections. But because they are exposed throught api.export it 
 seems impossible to stubs / mock them. 
 
+I have explore 2 solutions. You will find them in feature/namespaceGlobals and feature/useTestCollections. 
+
+The first one use a main object to store Collections like this :
+
+    var OneCollection = new Meteor.Collections('oncollection');
+    MyApp.Collections.set('oneCollection', OneCollection);
+    --- in another file, retreive your collection with : --
+    var OneCollection = MyApp.Collections.get('oneCollection');
+    
+Main disadvantages are :
+
+* you have to do `var oneCollection = MyApp.Collections.get('oneCollection');` in every function/methods you used onCollection
+* you lose auto completion from your favorite IDE
+
+The second one use persitency with MongoDb. So in a setup.js file you can clean all your database and create insert only
+what you need for the tests. It's possible if you can change the mongo collection name dynamically, or in other case it 
+will erase all your datas... In my project i always use NPM to start or test my apps, so it allows me to declare a 
+standard settings file and a test settings file. Then my Collections are declared like this :
+
+    new OneCollection = new Meteor.Collections(Meteor.settings.config.collections.prefix + '-onecollection');
+    
+Main disadvantages are :
+
+* you still use global variable for your collections
+
+
 = Installation
 
 If you are on windows or linux : 
