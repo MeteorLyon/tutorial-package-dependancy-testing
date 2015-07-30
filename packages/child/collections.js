@@ -1,3 +1,5 @@
 console.log('child/collections.js');
 
-Child = new Meteor.Collection(Meteor.settings.config.collections.prefix + '-child');
+var Child = new Meteor.Collection(Meteor.settings.config.collections.prefix + '-child');
+
+MyApp.Collections.set('Child', Child);

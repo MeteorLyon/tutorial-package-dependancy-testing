@@ -1,5 +1,5 @@
 Package.describe({
-  name: 'child',
+  name: 'collections',
   version: '0.0.1',
   // Brief, one-line summary of the package.
   summary: '',
@@ -12,12 +12,13 @@ Package.describe({
 
 Package.onUse(function(api) {
   api.versionsFrom('1.1.0.2');
-  api.use('collections');
-  api.addFiles(['collections.js', 'core.js', 'main.js']);
+  api.use('underscore');
+  api.addFiles(['main.js']);
+  api.export(['MyApp']);
 });
 
 Package.onTest(function(api) {
   api.use('tinytest');
-  api.use(['collections', 'child']);
+  api.use('collections');
   api.addFiles('tests/server.js', 'server');
 });

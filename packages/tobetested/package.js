@@ -12,12 +12,12 @@ Package.describe({
 
 Package.onUse(function(api) {
   api.versionsFrom('1.1.0.2');
-  api.use(['parent', 'underscore']);
+  api.use(['collections', 'parent', 'underscore']);
   api.addFiles(['collections.js', 'core.js', 'main.js']);
 });
 
 Package.onTest(function(api) {
   api.use('tinytest');
-  api.use(['tobetested', 'parent']);
-  api.addFiles('tests/server.js');
+  api.use(['collections', 'tobetested', 'parent']);
+  api.addFiles(['tests/stubs.js', 'tests/server.js'], 'server');
 });
