@@ -1,7 +1,6 @@
-Tutorial package dependancy testing
-===================================
+#Tutorial package dependancy testing
 
-= Introduction
+##Introduction
 
 The aim of the application is to find a solution on how testing packages. It might be simple, but when package depends
 on other packages (or on some vars used internally) it became harder to test because stubs and mocks are... rather 
@@ -48,8 +47,7 @@ Main disadvantages are :
 
 * you still use global variable for your collections
 
-
-= Installation
+##Installation
 
 If you are on windows or linux : 
 
@@ -59,7 +57,7 @@ Copy the package.dist.json into package.json
 
     cp package.dist.json package.json
 
-= Usage
+##Usage
 
 Test the child package with :
 
