@@ -21,9 +21,8 @@ Package.onUse(function(api) {
 
   // Take Care, if you don't export a global variable, you won't be able to redefine anything, so code depending on it
   // will be difficult to test. Here we decided to export ToBeTested
-  // It would be GREAT if we could export only for test environment !, I don't want to expose the variable, but i want
-  // to allow stubs / mock for that variable ...
-  api.export('ToBeTested');
+  // Here is a tips (undocumented) that allows to export only for test environement ! so great  https://forums.meteor.com/t/how-do-you-stub-a-function-from-another-package-when-testing/941/13
+  api.export('ToBeTested', 'server', {testOnly: true});
 });
 
 Package.onTest(function(api) {
