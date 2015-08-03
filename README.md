@@ -22,7 +22,7 @@ We try to test
 Each time we have one problem : the code depends on the Collections. But because they are exposed throught api.export it 
 seems impossible to stubs / mock them. 
 
-I have explore 2 solutions. You will find them in feature/namespaceGlobals and feature/useTestCollections. 
+I have explored 3 solutions. You will find them in feature/namespaceGlobals, feature/useTestCollections and feature/mockByPrototype. 
 
 The first one use a main object to store Collections like this :
 
@@ -46,6 +46,12 @@ standard settings file and a test settings file. Then my Collections are declare
 Main disadvantages are :
 
 * you still use global variable for your collections
+
+The third one, is the good one :-)
+You will redefine the prototype of the objects you want to stubs/mocks. And to allow mock of non exposed object, you will
+use {testOnly: true} as third params wher you want to export variables in test environment :
+
+* api.export('ToBeTested', 'server', {testOnly: true});
 
 ##Installation
 
